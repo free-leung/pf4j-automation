@@ -46,6 +46,8 @@ spring:
     path: /Users/ljackie/workspaces/java/pf4j-automation/build/plugins # 改为自己的
 ```
 
+启动类 >>> server 模块：ServerBoot.java 为入口类。
+
 ## 如何测试？
 
 打开你的请求工具：
