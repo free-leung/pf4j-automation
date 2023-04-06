@@ -1,0 +1,85 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url 'https://repo.spring.io/plugins-snapshot' }
+    }
+    ext {
+        // 指定 SpringBoot 版本
+        springBootVersion = '2.7.5'
+        // 指定 SpringCloud 版本
+        springCloudVersoin = '3.1.5'
+        // 使用 Spring 依赖管理
+        springDependencyManagementVersion = '1.1.1'
+        // 指定 pf4j-spring 版本
+        pf4jSpringVersion = '0.8.0'
+        // 指定 pf4j 版本
+        pf4jVersion = '3.8.0'
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:3.0.4", "io.spring.gradle:dependency-management-plugin:1.0.11.RELEASE")
+    }
+}
+
+allprojects{
+    apply plugin: 'java'
+    apply plugin: 'java-library'
+    group 'com.tigers.pf4j'
+    apply plugin: 'maven-publish'
+    apply plugin: 'io.spring.dependency-management'
+    version '1.0'
+    sourceCompatibility = 18
+    targetCompatibility = 18
+    repositories {
+        mavenLocal()
+        maven { url 'https://maven.aliyun.com/nexus/content/repositories/google' }
+        maven { url 'https://maven.aliyun.com/nexus/content/groups/public' }
+        maven { url 'https://maven.aliyun.com/nexus/content/repositories/jcenter'}
+        mavenCentral()
+        maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://repo.spring.io/milestone" }
+    }
+    jar {
+        enabled=true
+    }
+    dependencies {
+        testImplementation 'junit:junit:4.13.1'
+        testImplementation "org.springframework.boot:spring-boot-starter-test:2.7.5"
+    }
+}
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+subprojects {
+    [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+    configurations {
+        compile.exclude module: 'commons-logging'
+        all*.exclude module: 'commons-logging'
+    }
+    dependencyManagement {
+        dependencies {
+            dependency "org.springframework.boot:spring-boot:${springBootVersion}"
+            dependency "org.springframework.boot:spring-boot-starter:${springBootVersion}"
+            dependency "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+            dependency "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
+            dependency "org.springframework.boot:spring-boot-autoconfigure:${springBootVersion}"
+            dependency "org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}"
+            dependency "org.springframework.boot:spring-boot-starter-logging:${springBootVersion}"
+            dependency "org.pf4j:pf4j:${pf4jVersion}"
+            dependency "org.pf4j:pf4j-spring:${pf4jSpringVersion}"
+        }
+    }
+}
+
+// plugin location
+ext.pluginsDir = rootProject.buildDir.path + '/plugins'
+
+task buildJar(dependsOn: [':server:uberjar'])
+
+
+
+

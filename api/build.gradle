@@ -1,0 +1,6 @@
+dependencies {
+    // https://mvnrepository.com/artifact/org.pf4j/pf4j
+    api('com.tigers.pf4j:p4fj-spring-starter:1.0-Alpha'){
+        exclude group: "org.slf4j"
+    }
+}

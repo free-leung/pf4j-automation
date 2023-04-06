@@ -1,0 +1,36 @@
+apply plugin: 'application'
+
+mainClassName = 'com.tigers.pf4j.ServerBoot'
+run {
+    systemProperty 'pf4j.pluginsDir', '../build/plugins'
+}
+
+dependencies {
+    api project(':api')
+    api('com.tigers.pf4j:p4fj-spring-starter:1.0-Alpha'){
+        exclude group: "org.slf4j"
+    }
+    annotationProcessor('org.pf4j:pf4j')
+    api 'org.springframework.boot:spring-boot-starter'
+    api 'org.springframework.boot:spring-boot-starter-web'
+}
+
+task uberjar(type: Jar, dependsOn: ['compileJava']) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    zip64 true
+    from configurations.runtimeClasspath.asFileTree.files.collect {
+        exclude "META-INF/*.SF"
+        exclude "META-INF/*.DSA"
+        exclude "META-INF/*.RSA"
+        zipTree(it)
+    }
+    from files(sourceSets.main.output.classesDirs)
+    from files(sourceSets.main.resources)
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+
+    archiveBaseName = "${project.name}-plugin-demo"
+    archiveClassifier = "uberjar"
+}
+

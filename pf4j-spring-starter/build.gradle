@@ -1,0 +1,48 @@
+apply plugin: 'java-library'
+apply plugin: 'maven-publish'
+
+
+project.dependencies {
+    compileOnlyApi 'org.pf4j:pf4j-spring'
+    api 'org.pf4j:pf4j'
+    // 加入自动装配的配置，配置文件扫描需要用到的
+    api 'org.springframework.boot:spring-boot-autoconfigure'
+    api 'org.springframework.boot:spring-boot-configuration-processor'
+    // spring-boot 核心包, 当前对应SpringBoot 版本 2.7.5
+    api 'org.springframework.boot:spring-boot'
+}
+
+task packageJavadoc(type: Jar, dependsOn: 'javadoc') {
+    from javadoc.destinationDir
+    classifier = 'javadoc'
+}
+
+task packageSources(type: Jar, dependsOn: 'classes') {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+            groupId = 'com.tigers.pf4j'
+            artifactId = 'p4fj-spring-starter'
+            // 版本号：Alpha、Beta、RC、Release
+            version = '1.0-Alpha'
+            from components.java
+            artifact packageJavadoc
+            artifact packageSources
+        }
+    }
+}
+
+

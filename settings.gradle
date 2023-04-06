@@ -1,0 +1,9 @@
+rootProject.name = 'pf4j-automation'
+include 'pf4j-spring-starter'
+include 'common-utils'
+include 'server'
+include 'api'
+include 'plugins'
+include 'plugins:LoginServicePlugin'
+findProject(':plugins:LoginServicePlugin')?.name = 'LoginServicePlugin'
+

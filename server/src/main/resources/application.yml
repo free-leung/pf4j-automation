@@ -1,0 +1,7 @@
+spring:
+  p4fj:
+    enabled: true
+    path: /Users/ljackie/workspaces/java/pf4j-automation/build/plugins
+logging:
+  level:
+    org.pf4j: debug
