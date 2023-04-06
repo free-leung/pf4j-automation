@@ -1,9 +1,6 @@
 apply plugin: 'application'
 
 mainClassName = 'com.tigers.pf4j.ServerBoot'
-run {
-    systemProperty 'pf4j.pluginsDir', '../build/plugins'
-}
 
 dependencies {
     api project(':api')

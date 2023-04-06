@@ -49,6 +49,26 @@ public class DefaultUserService extends SpringPluginNode {
         userInitMap.put("Leung", "123456") ;
     }
 
+    /**
+     * 优雅清理
+     */
+    @Override
+    public void beforeEnd() {
+        if (userInitMap != null)
+        {
+            userInitMap.clear();
+            userInitMap = null ;
+        }
+    }
+
+    /**
+     * 料理后事
+     */
+    @Override
+    public void ended() {
+        logger.info("插件：{} 下线！！", this.getClass().getSimpleName());
+    }
+
     @Extension
     public static class Login implements LoginService {
         /**
